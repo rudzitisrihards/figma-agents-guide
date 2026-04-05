@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Agents + Figma Canvas – Designer's Guide</title>
+  <style>
+    :root {
+      --black: #0d0d0d;
+      --grey-900: #1a1a1a;
+      --grey-700: #3d3d3d;
+      --grey-400: #9a9a9a;
+      --grey-200: #e8e8e8;
+      --grey-100: #f4f4f4;
+      --white: #ffffff;
+      --accent: #5d5fef;
+      --accent-light: #ededff;
+      --green: #1a7f5a;
+      --green-light: #e6f5ef;
+      --amber: #92400e;
+      --amber-light: #fef3c7;
+      --radius: 8px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); font-size: 16px; line-height: 1.65; color: var(--grey-900); background: var(--white); }
+
+    .page { max-width: 780px; margin: 0 auto; padding: 64px 32px 120px; }
+
+    /* COVER */
+    .cover { padding: 56px 48px; background: var(--black); border-radius: 12px; margin-bottom: 64px; position: relative; overflow: hidden; }
+    .cover::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, #5d5fef55 0%, transparent 70%); pointer-events: none; }
+    .cover-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+    .cover h1 { font-size: 36px; font-weight: 700; line-height: 1.2; color: var(--white); margin-bottom: 16px; }
+    .cover-subtitle { font-size: 17px; color: #adadad; max-width: 520px; line-height: 1.5; }
+    .cover-meta { margin-top: 40px; display: flex; gap: 24px; flex-wrap: wrap; }
+    .cover-tag { font-size: 13px; font-weight: 500; color: #888; border: 1px solid #333; border-radius: 20px; padding: 4px 14px; }
+
+    /* SECTIONS */
+    section { margin-bottom: 60px; }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    h2 { font-size: 26px; font-weight: 700; line-height: 1.25; color: var(--black); margin-bottom: 20px; }
+    h3 { font-size: 17px; font-weight: 600; color: var(--black); margin-bottom: 10px; margin-top: 28px; }
+    p { color: var(--grey-700); margin-bottom: 16px; }
+    p:last-child { margin-bottom: 0; }
+    section ul { padding-left: 1.2em; margin-bottom: 16px; color: var(--grey-700); }
+    section li { margin-bottom: 6px; }
+
+    /* HERO CALLOUT */
+    .hero-callout { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin-bottom: 24px; }
+    .hero-callout p { font-size: 17px; font-weight: 500; color: #2a2a6e; margin: 0; line-height: 1.5; }
+
+    /* CARDS */
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    @media (max-width: 560px) { .card-grid { grid-template-columns: 1fr; } }
+    .card { background: var(--grey-100); border-radius: var(--radius); padding: 20px 22px; }
+    .card-icon { font-size: 22px; margin-bottom: 10px; }
+    .card h4 { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
+    .card p { font-size: 14px; color: var(--grey-700); line-height: 1.5; margin: 0; }
+
+    /* TERM TABLE */
+    .term-list { display: flex; flex-direction: column; border: 1px solid var(--grey-200); border-radius: var(--radius); overflow: hidden; }
+    .term-row { display: flex; }
+    .term-row:not(:last-child) { border-bottom: 1px solid var(--grey-200); }
+    .term-name { background: var(--grey-100); font-size: 13px; font-weight: 700; color: var(--black); padding: 14px 16px; font-family: 'SF Mono','Fira Code',monospace; border-right: 1px solid var(--grey-200); white-space: nowrap; display: flex; align-items: flex-start; line-height: 1.4; width: 200px; flex-shrink: 0; }
+    .term-def { font-size: 14px; color: var(--grey-700); padding: 14px 18px; line-height: 1.55; min-width: 0; word-break: break-word; }
+
+    /* STEP LIST */
+    .step-list { display: flex; flex-direction: column; margin-top: 24px; }
+    .step { display: flex; gap: 20px; padding: 0 0 32px 0; position: relative; }
+    .step:not(:last-child)::after { content: ''; position: absolute; left: 17px; top: 36px; bottom: 0; width: 2px; background: var(--grey-200); }
+    .step-num { flex-shrink: 0; width: 36px; height: 36px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; position: relative; z-index: 1; }
+    .step-body { min-width: 0; flex: 1; }
+    .step-body h4 { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 6px; padding-top: 6px; }
+    .step-body p { font-size: 14px; color: var(--grey-700); line-height: 1.55; margin: 0; }
+    .step-owner { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 4px; margin-top: 8px; background: var(--grey-200); color: var(--grey-700); }
+    .step-owner.you { background: var(--accent-light); color: var(--accent); }
+    .step-owner.it { background: #fff0e6; color: #c2410c; }
+    .step-owner.figma-admin { background: #f0faf0; color: var(--green); }
+    .step-owner.security { background: #fff7f0; color: #92400e; }
+
+    /* CODE BLOCKS */
+    pre { background: var(--grey-900); color: #e2e8f0; border-radius: var(--radius); padding: 16px 20px; font-family: 'SF Mono','Fira Code','Courier New',monospace; font-size: 13px; line-height: 1.6; overflow-x: auto; margin-bottom: 12px; display: block; width: 100%; box-sizing: border-box; white-space: pre; }
+    code { font-family: 'SF Mono','Fira Code','Courier New',monospace; font-size: 13px; background: var(--grey-100); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+
+    /* INSTALL STEPS */
+    .install-steps { margin-top: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .install-step { border: 1px solid var(--grey-200); border-radius: var(--radius); overflow: hidden; }
+    .install-step-header { background: var(--grey-100); padding: 12px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--grey-200); }
+    .install-step-num { width: 24px; height: 24px; background: var(--accent); color: white; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .install-step-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .install-step-body { padding: 16px 20px; }
+    .install-step-body p { font-size: 14px; color: var(--grey-700); margin-bottom: 10px; }
+
+    /* CALLOUT */
+    .callout { border-radius: var(--radius); padding: 16px 20px; margin-top: 16px; font-size: 14px; line-height: 1.55; }
+    .callout.info { background: var(--accent-light); color: #2a2a6e; }
+    .callout.tip { background: var(--green-light); color: var(--green); }
+    .callout.warning { background: var(--amber-light); color: var(--amber); }
+    .callout.danger { background: #fef2f2; color: #991b1b; }
+    .callout strong { font-weight: 700; }
+    .callout p { color: inherit; margin-bottom: 6px; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* ROLE SECTION */
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    @media (max-width: 560px) { .role-grid { grid-template-columns: 1fr; } }
+    .role-card { border-radius: var(--radius); padding: 20px; border: 1px solid var(--grey-200); }
+    .role-card h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .role-card.designer h4 { color: var(--accent); }
+    .role-card.agent h4 { color: var(--grey-400); }
+    .role-card ul { padding-left: 18px; color: var(--grey-700); font-size: 14px; line-height: 1.7; }
+
+    /* PROMPT TEMPLATE */
+    .prompt-template { background: var(--grey-900); border-radius: var(--radius); padding: 24px 28px; margin-top: 20px; }
+    .prompt-line { font-family: 'SF Mono','Fira Code',monospace; font-size: 13px; line-height: 1.7; color: #94a3b8; display: block; }
+    .prompt-line .key { color: #7dd3fc; }
+    .prompt-line .val { color: #86efac; }
+    .prompt-line .comment { color: #475569; }
+
+    /* DIVIDER */
+    hr { border: none; border-top: 1px solid var(--grey-200); margin: 48px 0; }
+
+    /* TOC */
+    .toc { background: var(--grey-100); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
+    .toc-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--grey-400); margin-bottom: 14px; }
+    .toc ol { padding-left: 18px; color: var(--grey-700); font-size: 14px; line-height: 2; }
+    .toc a { color: var(--grey-700); text-decoration: none; }
+    .toc a:hover { color: var(--accent); }
+
+    /* DIAGRAMS */
+    figure.diagram { margin: 28px 0 4px; }
+    figure.diagram figcaption { font-size: 12px; color: var(--grey-400); text-align: center; margin-top: 10px; line-height: 1.4; }
+
+    /* FOOTER */
+    .doc-footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--grey-200); font-size: 13px; color: var(--grey-400); }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Workflow Guide · UX Design</div>
+    <h1>AI Agents &amp;<br>Figma Canvas</h1>
+    <p class="cover-subtitle">How to set up and use AI coding agents to design directly inside Figma – using your actual components and design system.</p>
+    <div class="cover-meta">
+      <span class="cover-tag">Setup guide for UX Designers</span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#idea">The Big Idea</a></li>
+      <li><a href="#terms">Key Terms Explained</a></li>
+      <li><a href="#prerequisites">What You Need</a></li>
+      <li><a href="#permissions">Permissions &amp; Stakeholders</a></li>
+      <li><a href="#install">Installation Walkthrough</a></li>
+      <li><a href="#claude-app">Adding Figma to the Claude App</a></li>
+      <li><a href="#designer-role">Your Role as a Designer</a></li>
+      <li><a href="#code-connect">Code Connect (Design → Code)</a></li>
+      <li><a href="#prompting">Prompting Guide</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#useful-links">Useful Links</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. THE BIG IDEA -->
+  <section id="idea">
+    <div class="section-label">01 – Overview</div>
+    <h2>The big idea</h2>
+    <div class="hero-callout">
+      <p>You can now type a plain-English request in an AI tool, and it will reach into your Figma file and build or edit designs using your actual components and design system – not generic shapes.</p>
+    </div>
+    <figure class="diagram"><svg viewBox="0 0 680 488" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
+  </defs>
+  <rect width="680" height="488" fill="#0f172a" rx="10"/>
+
+  <!-- You (designer) -->
+  <rect x="230" y="24" width="220" height="56" rx="8" fill="#065f46"/>
+  <text x="340" y="47" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">You (the designer)</text>
+  <text x="340" y="67" text-anchor="middle" fill="#6ee7b7" font-family="Inter,system-ui,sans-serif" font-size="12">Write a prompt in plain text</text>
+
+  <!-- Arrow -->
+  <line x1="340" y1="80" x2="340" y2="106" stroke="#374151" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- AI coding agent -->
+  <rect x="175" y="110" width="330" height="56" rx="8" fill="#312e81"/>
+  <text x="340" y="133" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">AI coding agent</text>
+  <text x="340" y="153" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="12">Claude Code, Cursor, Codex, Augment, Warp…</text>
+
+  <!-- Arrow -->
+  <line x1="340" y1="166" x2="340" y2="192" stroke="#374151" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- Figma MCP server -->
+  <rect x="175" y="196" width="330" height="56" rx="8" fill="#78350f"/>
+  <text x="340" y="219" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">Figma MCP server</text>
+  <text x="340" y="239" text-anchor="middle" fill="#fde68a" font-family="Inter,system-ui,sans-serif" font-size="12">Translates agent intent → Figma actions</text>
+
+  <!-- Two tools label -->
+  <text x="340" y="272" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11">two complementary tools ↓</text>
+
+  <!-- Arrows to tools -->
+  <line x1="300" y1="252" x2="208" y2="284" stroke="#374151" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="380" y1="252" x2="472" y2="284" stroke="#374151" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- use_figma tool -->
+  <rect x="56" y="288" width="262" height="52" rx="8" fill="#14532d"/>
+  <text x="187" y="311" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">use_figma</text>
+  <text x="187" y="329" text-anchor="middle" fill="#86efac" font-family="Inter,system-ui,sans-serif" font-size="11">Create / edit on canvas</text>
+
+  <!-- generate_figma_design tool -->
+  <rect x="362" y="288" width="262" height="52" rx="8" fill="#14532d"/>
+  <text x="493" y="311" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">generate_figma_design</text>
+  <text x="493" y="329" text-anchor="middle" fill="#86efac" font-family="Inter,system-ui,sans-serif" font-size="11">Import live code → Figma layers</text>
+
+  <!-- Arrows to canvas -->
+  <line x1="187" y1="340" x2="264" y2="368" stroke="#374151" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="493" y1="340" x2="416" y2="368" stroke="#374151" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- Figma canvas -->
+  <rect x="72" y="372" width="536" height="52" rx="8" fill="#166534"/>
+  <text x="340" y="394" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">Figma canvas</text>
+  <text x="340" y="412" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="12">Components, variables, auto layout, design system</text>
+
+  <!-- Arrow to skills -->
+  <line x1="340" y1="424" x2="340" y2="446" stroke="#374151" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- Skills -->
+  <rect x="72" y="450" width="536" height="26" rx="8" fill="#1e293b"/>
+  <text x="340" y="468" text-anchor="middle" fill="#94a3b8" font-family="Inter,system-ui,sans-serif" font-size="12">Skills (markdown files you write) – your conventions, steps, component rules</text>
+
+  <!-- Feedback loop arc (left side) -->
+  <path d="M 52 130 Q 16 290 52 414" stroke="#1e3a5f" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+  <text transform="rotate(-90)" x="-300" y="34" text-anchor="middle" fill="#374151" font-family="Inter,system-ui,sans-serif" font-size="10">screenshot feedback loop</text>
+  <polygon points="50,414 56,408 44,408" fill="#1e3a5f"/>
+</svg><figcaption>End-to-end workflow: from your plain-English prompt to the Figma canvas, via the AI agent and MCP server.</figcaption></figure>
+    <p>Figma's canvas is now open to AI agents. This means an AI tool like Claude can connect directly to your Figma file, read your component library, understand your design system, and create or modify designs on your behalf – all from a simple text prompt.</p>
+    <p>This isn't a plugin that generates Lorem Ipsum frames. The agent uses your real components, your real variables, and your real naming conventions. The quality of the output is directly tied to the quality of your design system.</p>
+  </section>
+
+  <hr/>
+
+  <!-- 2. KEY TERMS -->
+  <section id="terms">
+    <div class="section-label">02 – Glossary</div>
+    <h2>Key terms explained</h2>
+    <p>Before diving into setup, here are the concepts you'll encounter and what they actually mean.</p>
+    <div class="term-list">
+      <div class="term-row">
+        <div class="term-name">AI Agent</div>
+        <div class="term-def">An AI tool that can take actions on your behalf – not just answer questions, but actually open files, create designs, run checks, and iterate. Claude Code, Cursor, Codex, Augment, and Warp are all agents.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">MCP Server</div>
+        <div class="term-def"><strong>Model Context Protocol.</strong> A standardised way for AI tools to connect to external apps and services. Figma runs an MCP server – when an AI agent connects to it, the agent gains the ability to read and write your Figma files directly. Think of it as a secure API bridge between the AI and Figma.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">Claude Code</div>
+        <div class="term-def">Anthropic's AI agent. It runs in your terminal (command line), not in a browser window. You type prompts, it carries out tasks – including connecting to Figma via the MCP server.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">use_figma</div>
+        <div class="term-def">The core tool the agent uses once connected to Figma. It empowers the agent to operate on your Figma canvas using your design system – selecting components, placing frames, applying variables, and building layouts.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">generate_figma_design</div>
+        <div class="term-def">A companion tool that translates HTML from live apps or websites into editable Figma layers. Useful for reverse-engineering existing interfaces into your design system.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">Skills</div>
+        <div class="term-def">Markdown files that tell the agent how to work in your Figma file. They define the workflow: which steps to take, what sequencing to follow, which conventions to use. Skills encode your team's design decisions so every agent run follows your rules – not its own defaults.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">Code Connect</div>
+        <div class="term-def">A Figma feature (set up by a developer) that links each Figma component to its real code counterpart in the codebase. With Code Connect, the agent doesn't just see a "Button" – it sees the actual <code>&lt;Button&gt;</code> React component. This enables the agent to generate real, production-ready code.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">Personal Access Token</div>
+        <div class="term-def">A private key generated in your Figma account settings. It's how Claude authenticates with Figma on your behalf. Treat it like a password – never share it or commit it to a document.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">CLAUDE.md</div>
+        <div class="term-def">A configuration file you can place inside a project folder. Rules saved here are automatically loaded every session when you're working in that folder. Good for project-specific defaults like "always use this component library" or "always use 375×848 iPhone frames".</div>
+      </div>
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 3. PREREQUISITES -->
+  <section id="prerequisites">
+    <div class="section-label">03 – Requirements</div>
+    <h2>What You Need</h2>
+    <p>Three things are required before the workflow can run. Two of them are accounts you likely already have; one is a small piece of software to install.</p>
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h4>A Figma account with your design system</h4>
+        <p>Your components, variables, and styles should already be set up in Figma. The better organised your component library, the better the agent's output.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h4>An AI coding agent</h4>
+        <p>This guide covers Claude Code. Other supported agents include Cursor, Codex, Augment, and Warp – all work with the same Figma MCP server.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔌</div>
+        <h4>Figma MCP server connection</h4>
+        <p>A one-time configuration that connects your chosen AI agent to Figma. This is what allows the agent to read and write your Figma files. No coding required.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 4. PERMISSIONS -->
+  <section id="permissions">
+    <div class="section-label">04 – Approvals</div>
+    <h2>Permissions &amp; stakeholders</h2>
+    <p>This workflow involves a few external systems, so a handful of teams may need to be looped in before you can get started. Here's a map of who owns what.</p>
+    <figure class="diagram"><svg viewBox="0 0 680 268" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
+  <defs>
+    <marker id="b1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
+  </defs>
+  <rect width="680" height="268" fill="#0f172a" rx="10"/>
+
+  <!-- Your laptop box -->
+  <rect x="20" y="20" width="210" height="180" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="125" y="40" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">Your laptop</text>
+  <rect x="36" y="52" width="178" height="52" rx="7" fill="#312e81"/>
+  <text x="125" y="73" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Claude Code</text>
+  <text x="125" y="91" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="11">CLI app, runs locally</text>
+  <rect x="36" y="116" width="178" height="52" rx="7" fill="#1e293b"/>
+  <text x="125" y="137" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Figma desktop app</text>
+  <text x="125" y="155" text-anchor="middle" fill="#94a3b8" font-family="Inter,system-ui,sans-serif" font-size="11">Your normal Figma</text>
+
+  <!-- Firewall label -->
+  <text x="253" y="112" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600">Firewall /</text>
+  <text x="253" y="124" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600">corp network</text>
+
+  <!-- HTTPS arrows from Claude Code -->
+  <line x1="214" y1="78" x2="368" y2="78" stroke="#374151" stroke-width="1.5" marker-end="url(#b1)"/>
+  <text x="291" y="70" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10">HTTPS</text>
+
+  <line x1="214" y1="142" x2="368" y2="188" stroke="#374151" stroke-width="1.5" marker-end="url(#b1)"/>
+
+  <!-- Figma cloud box -->
+  <rect x="368" y="20" width="292" height="228" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="514" y="40" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">Figma cloud</text>
+
+  <!-- Anthropic API -->
+  <rect x="384" y="52" width="260" height="52" rx="7" fill="#1e3a8a"/>
+  <text x="514" y="73" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Anthropic API</text>
+  <text x="514" y="91" text-anchor="middle" fill="#bfdbfe" font-family="Inter,system-ui,sans-serif" font-size="11">Runs the AI model</text>
+
+  <!-- Figma MCP server -->
+  <rect x="384" y="120" width="260" height="52" rx="7" fill="#78350f"/>
+  <text x="514" y="141" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Figma MCP server</text>
+  <text x="514" y="159" text-anchor="middle" fill="#fde68a" font-family="Inter,system-ui,sans-serif" font-size="11">Translates agent → Figma</text>
+
+  <!-- Your Figma files -->
+  <rect x="384" y="188" width="260" height="52" rx="7" fill="#166534"/>
+  <text x="514" y="209" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Your Figma files</text>
+  <text x="514" y="227" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="11">Components, variables</text>
+
+</svg><figcaption>Network diagram: two HTTPS calls leave your machine – one to Anthropic's API, one to Figma's MCP server. Authentication with Figma is handled via OAuth in the browser.</figcaption></figure>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Install Claude Code on your laptop</h4>
+          <p>Claude Code is a command-line tool you install locally. It doesn't have a graphical interface – you type prompts in a terminal. Your IT team needs to permit the installation, and the tool needs to be able to make outbound HTTPS calls to Anthropic's API.</p>
+          <span class="step-owner it">IT Team</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Connect Claude Code to Figma via OAuth</h4>
+          <p>A single terminal command registers Figma's MCP server with Claude Code. You then run <code>/mcp</code> inside Claude Code, select Figma, and choose Authenticate – a browser window opens, you log into your Figma account and approve access. No tokens, no config files. Claude Code manages the connection from there on.</p>
+          <span class="step-owner you">You</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Data privacy check</h4>
+          <p>When the agent reads your Figma file to understand your components, that design content is sent to Anthropic's API as context. Worth flagging to your security or legal team so they can check Anthropic's data processing terms against your company's data classification policy.</p>
+          <span class="step-owner security">Security / Legal</span>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 5. INSTALLATION -->
+  <section id="install">
+    <div class="section-label">05 – CLI setup</div>
+    <h2>Terminal installation walkthrough</h2>
+    <p>These are the full terminal commands to get Claude Code installed on a Mac and connected to Figma. Follow each step in order. If your IT team handles the installation, share this section with them.</p>
+    <div class="callout info">
+      <strong>Mac only.</strong> These instructions are for macOS using the ZSH shell. If you're on Windows or Linux, the commands differ slightly – refer to the official Claude Code documentation.
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Install Homebrew (Mac package manager)</h4>
+          <p>Homebrew is a tool that makes it easy to install software on a Mac. If you already have it, skip to step 2.</p>
+          <pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
+          <p>Once installed, add it to your shell's path so it's available in every terminal session:</p>
+          <pre>echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+source ~/.zshrc</pre>
+          <p>Verify it worked:</p>
+          <pre>brew --version</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Install NVM (Node version manager)</h4>
+          <p>NVM lets you install and manage versions of Node.js, which Claude Code requires.</p>
+          <pre>brew install nvm</pre>
+          <p>Add NVM to your shell:</p>
+          <pre>mkdir ~/.nvm
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"' >> ~/.zshrc
+source ~/.zshrc</pre>
+          <p>Verify:</p>
+          <pre>nvm --version</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Install Node.js</h4>
+          <p>Install the latest long-term support (LTS) version of Node.js:</p>
+          <pre>nvm install --lts
+nvm use --lts</pre>
+          <p>Verify both Node and npm are installed:</p>
+          <pre>node --version
+npm --version</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Install Claude Code</h4>
+          <p>Install Claude Code globally using npm:</p>
+          <pre>npm install -g @anthropic-ai/claude-code</pre>
+          <p>Verify the installation:</p>
+          <pre>claude --version</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Log into Claude Code</h4>
+          <p>Start Claude Code and follow the login prompts (it will open a browser window to authenticate with your Anthropic account):</p>
+          <pre>claude</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Connect Claude Code to Figma's MCP server</h4>
+          <p>Register Figma's remote MCP server with Claude Code. The <code>--scope user</code> flag makes it available across all your projects, not just the current folder:</p>
+          <pre>claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp</pre>
+          <p>Then verify it was added:</p>
+          <pre>claude mcp list</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Authenticate with Figma via OAuth</h4>
+          <p>No personal access token is needed. Figma uses OAuth – start Claude Code and run the MCP authentication flow:</p>
+          <pre>claude</pre>
+          <p>Inside Claude Code, type <code>/mcp</code>, select <strong>figma</strong> from the list, then select <strong>Authenticate</strong>. A browser window will open with Figma's OAuth consent screen. Click <strong>Allow access</strong>. Once authorised, the browser will confirm the connection and Claude Code will show "Authentication successful. Connected to figma."</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Test the connection</h4>
+          <p>Create a project folder, navigate into it, and start Claude. Then send a test prompt using a link to a Figma file you have access to:</p>
+          <pre>mkdir ~/my-figma-project
+cd ~/my-figma-project
+claude</pre>
+          <p>Then type a prompt like:</p>
+          <pre>Look at the Components page in [your Figma link] and list all the components you can see, grouped by category. Don't create anything yet.</pre>
+          <div class="callout tip">
+            <strong>Good first test.</strong> Starting with "list what you see" before asking it to create anything is a reliable way to confirm the connection is working and the agent can actually read your component library.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 6. CLAUDE APP -->
+  <section id="claude-app">
+    <div class="section-label">06 – Claude app setup</div>
+    <h2>Claude app installation walkthrough</h2>
+    <p>If you're using the Claude desktop app (rather than Claude Code in the terminal), you can connect Figma through the app's settings – no terminal required.</p>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Open connector settings</h4>
+          <p>Go to <strong>Settings → Connectors → Add custom connector</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Enter Figma's MCP endpoint</h4>
+          <p>Enter <code>https://mcp.figma.com/mcp</code> as the URL and give the connector a name.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Authenticate via OAuth</h4>
+          <p>An OAuth window will open in your browser – log in to Figma and approve the permissions.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout info">
+      <strong>Note:</strong> The Figma MCP connection is account-level – saved to your Claude account, not to a specific project folder. Once connected, it's available across all your Claude sessions.
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 7. DESIGNER'S ROLE -->
+  <section id="designer-role">
+    <div class="section-label">07 – Your Role</div>
+    <h2>Your role as a designer</h2>
+    <p>The rise of AI coding agents doesn't change what makes a great designer, but it fundamentally changes how you work. You are shifting from a builder of static layouts to a director of a living system.</p>
+
+    <h3>From Manual Labor to Systems Orchestration</h3>
+    <p>Previously, much of your time was spent manually drawing frames and pushing pixels to mimic components. With AI agents, the agent handles the assembly. Your value now lies in Systems Thinking:</p>
+    <ul>
+      <li><strong>Defining the Logic:</strong> You aren't just placing a button; you are defining the rules for when and how that button appears.</li>
+      <li><strong>Quality Control:</strong> The agent is only as good as your Design System. If your naming conventions are messy or your Auto Layout is broken, the agent will fail. Your job is to maintain the "source of truth."</li>
+      <li><strong>Creative Direction:</strong> You move from "How do I draw this?" to "Is this the right flow for the user?"</li>
+    </ul>
+
+    <h3>Bridging the Gap: Design is the Code</h3>
+    <p>The biggest shift is in the handoff. Traditionally, developers had to "interpret" your static Figma files, often leading to "pixel-polishing" meetings.</p>
+    <ul>
+      <li><strong>Less Interpretation:</strong> Because the agent uses Code Connect, it sees your Figma components as actual React elements (or your specific production code). It isn't guessing your intent; it is using the real thing.</li>
+      <li><strong>Functionality-First Development:</strong> Since the UI structure is generated directly from your design rules, developers spend less time recreating your visuals and more time on complex logic, security, and performance.</li>
+    </ul>
+
+    <h3>The Reality Check</h3>
+    <p>You still need your core UX skills – empathy, hierarchy, and logical flow. The tool just removes the friction of manual construction for both the designer and front-end developer. You are no longer just a figma user; you are an architect who uses the Figma canvas as a command center for production.</p>
+  </section>
+
+  <hr/>
+
+  <!-- 8. CODE CONNECT -->
+  <section id="code-connect">
+    <div class="section-label">08 – Design to code</div>
+    <h2>Code Connect: design to production components</h2>
+    <p>Code Connect is a Figma feature that links each component in your design system to its actual code counterpart in the codebase. It's an optional layer – relevant when the goal is to produce working code from your designs, not just Figma frames.</p>
+    <figure class="diagram"><svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
+  <defs>
+    <marker id="c1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
+    <marker id="c2" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M9,0 L9,6 L0,3z" fill="#4b5563"/></marker>
+  </defs>
+  <rect width="680" height="290" fill="#0f172a" rx="10"/>
+
+  <!-- Figma canvas -->
+  <rect x="24" y="56" width="180" height="80" rx="8" fill="#166534"/>
+  <text x="114" y="88" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">Figma canvas</text>
+  <text x="114" y="108" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="11">Components</text>
+  <text x="114" y="124" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="11">+ variables</text>
+
+  <!-- MCP server -->
+  <rect x="250" y="56" width="180" height="80" rx="8" fill="#78350f"/>
+  <text x="340" y="88" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">MCP server</text>
+  <text x="340" y="108" text-anchor="middle" fill="#fde68a" font-family="Inter,system-ui,sans-serif" font-size="11">Figma + Code Connect</text>
+
+  <!-- AI agent -->
+  <rect x="476" y="56" width="180" height="80" rx="8" fill="#312e81"/>
+  <text x="566" y="88" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">AI agent</text>
+  <text x="566" y="108" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="11">Claude Code,</text>
+  <text x="566" y="124" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="11">Cursor…</text>
+
+  <!-- Bidirectional arrows (top arc: design→code) -->
+  <path d="M 204 80 Q 340 18 476 80" stroke="#374151" stroke-width="1.5" fill="none" marker-end="url(#c1)"/>
+  <text x="340" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">design → code</text>
+
+  <!-- Bidirectional arrows (bottom arc: code→design) -->
+  <path d="M 476 112 Q 340 180 204 112" stroke="#374151" stroke-width="1.5" fill="none" marker-end="url(#c1)"/>
+  <text x="340" y="174" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">code → design</text>
+
+  <!-- Horizontal arrows between boxes -->
+  <line x1="204" y1="96" x2="248" y2="96" stroke="#374151" stroke-width="1.5" marker-end="url(#c1)"/>
+  <line x1="430" y1="96" x2="474" y2="96" stroke="#374151" stroke-width="1.5" marker-end="url(#c1)"/>
+
+  <!-- Output boxes -->
+  <rect x="24" y="210" width="180" height="40" rx="7" fill="#1e293b"/>
+  <text x="114" y="229" text-anchor="middle" fill="#94a3b8" font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="600">Code Connect</text>
+  <text x="114" y="244" text-anchor="middle" fill="#64748b" font-family="Inter,system-ui,sans-serif" font-size="10">Links components → code</text>
+
+  <rect x="250" y="210" width="180" height="40" rx="7" fill="#7f1d1d"/>
+  <text x="340" y="229" text-anchor="middle" fill="#fca5a5" font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="600">Figma Sites / Make</text>
+  <text x="340" y="244" text-anchor="middle" fill="#fca5a5" font-family="Inter,system-ui,sans-serif" font-size="10">No-code prototype</text>
+
+  <rect x="476" y="210" width="180" height="40" rx="7" fill="#1e1b4b"/>
+  <text x="566" y="229" text-anchor="middle" fill="#a5b4fc" font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="600">Working code</text>
+  <text x="566" y="244" text-anchor="middle" fill="#a5b4fc" font-family="Inter,system-ui,sans-serif" font-size="10">React, HTML, etc.</text>
+
+  <!-- Output arrows -->
+  <line x1="114" y1="136" x2="114" y2="208" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#c1)"/>
+  <line x1="340" y1="136" x2="340" y2="208" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#c1)"/>
+  <line x1="566" y1="136" x2="566" y2="208" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#c1)"/>
+</svg><figcaption>The full picture: Figma canvas, the MCP server (with Code Connect), and the AI agent can move in both directions – design to code, and code back to design.</figcaption></figure>
+    <h3>What it does</h3>
+    <p>Without Code Connect, when an agent reads a "Button" component in your Figma file, it generates whatever React code it thinks makes sense – probably something generic. With Code Connect, it sees the mapping: <em>"this Figma Button corresponds to the real <code>&lt;Button&gt;</code> React component"</em> – and generates code that calls your actual component with the correct props.</p>
+    <p>The result is a working, clickable frontend – actual runnable code, not a prototype.</p>
+    <h3>How the mapping works</h3>
+    <p>A developer writes small configuration files – one per component – that declare the link between a Figma component's variants and the corresponding code props. A simplified example for a Button:</p>
+    <pre>Figma component: "Button"
+  variant "Type" = "Primary"  →  React prop: variant="primary"
+  variant "Size" = "Large"    →  React prop: size="lg"
+  text layer "Label"          →  React prop: children</pre>
+    <figure class="diagram"><svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
+  <defs>
+    <marker id="d1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
+  </defs>
+  <rect width="680" height="300" fill="#0f172a" rx="10"/>
+
+  <!-- Figma file group -->
+  <rect x="16" y="16" width="188" height="190" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="110" y="36" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">Figma file</text>
+  <rect x="28" y="46" width="164" height="38" rx="6" fill="#166534"/>
+  <text x="110" y="71" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Button component</text>
+  <rect x="28" y="96" width="164" height="38" rx="6" fill="#166534"/>
+  <text x="110" y="121" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Card component</text>
+  <rect x="28" y="146" width="164" height="38" rx="6" fill="#166534"/>
+  <text x="110" y="171" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Nav component</text>
+
+  <!-- Arrows from Figma to Code Connect -->
+  <line x1="204" y1="65" x2="274" y2="115" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="204" y1="115" x2="274" y2="120" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="204" y1="165" x2="274" y2="126" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+
+  <!-- Code Connect -->
+  <rect x="276" y="76" width="128" height="88" rx="8" fill="#78350f"/>
+  <text x="340" y="112" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">Code</text>
+  <text x="340" y="130" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700">Connect</text>
+  <text x="340" y="152" text-anchor="middle" fill="#fde68a" font-family="Inter,system-ui,sans-serif" font-size="11">mapping files</text>
+
+  <!-- Arrows from Code Connect to React -->
+  <line x1="404" y1="115" x2="476" y2="65" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="404" y1="120" x2="476" y2="115" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="404" y1="126" x2="476" y2="165" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+
+  <!-- React codebase group -->
+  <rect x="476" y="16" width="188" height="190" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="570" y="36" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">React codebase</text>
+  <rect x="488" y="46" width="164" height="38" rx="6" fill="#312e81"/>
+  <text x="570" y="71" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Button.tsx</text>
+  <rect x="488" y="96" width="164" height="38" rx="6" fill="#312e81"/>
+  <text x="570" y="121" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Card.tsx</text>
+  <rect x="488" y="146" width="164" height="38" rx="6" fill="#312e81"/>
+  <text x="570" y="171" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600">Nav.tsx</text>
+
+  <!-- Arrows down to AI agent -->
+  <line x1="110" y1="206" x2="200" y2="248" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="570" y1="206" x2="480" y2="248" stroke="#374151" stroke-width="1.5" marker-end="url(#d1)"/>
+
+  <!-- AI agent -->
+  <rect x="160" y="250" width="360" height="36" rx="8" fill="#312e81"/>
+  <text x="340" y="265" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">AI agent (Claude Code)</text>
+  <text x="340" y="280" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="11">Reads design + mapped code together</text>
+
+  <!-- Caption below -->
+  <!-- Using figcaption in HTML for this -->
+</svg><figcaption>Code Connect maps each Figma component to its real code counterpart. The AI agent reads both sides together and generates screens using your actual components.</figcaption></figure>
+    <h3>What you need already in place</h3>
+    <p>Code Connect only works if your Figma components already have a corresponding React component library in code. There are two realistic starting points:</p>
+    <p><strong>You have an existing React component library</strong> that mirrors your Figma components – a developer sets up Code Connect, and you're ready to generate code from your designs.</p>
+    <p><strong>You're starting from scratch</strong> with no codebase yet – you design in Figma first, ask the agent to generate a React component library from your Figma components, and then set up Code Connect for future use. This works, but it's a bigger initial investment.</p>
+    <h3>What you control vs. what a developer controls</h3>
+    <p>You own the Figma side entirely: the designs, the component structure, the variants, the naming. The quality of what Code Connect can map directly reflects how well-organised your Figma components are. Inconsistent naming, missing variants, or components that don't cleanly correspond to how developers have built things will create gaps in the mapping.</p>
+  </section>
+
+  <hr/>
+
+  <!-- 9. PROMPTING -->
+  <section id="prompting">
+    <div class="section-label">09 – Prompting</div>
+    <h2>Prompting guide</h2>
+    <p>The quality of the agent's output is directly influenced by how clearly you write your prompts. Here's a template that works well for screen creation tasks.</p>
+    <div class="prompt-template">
+      <span class="prompt-line"><span class="key">Task:</span> Create a <span class="val">[screen name]</span> screen in this Figma page: <span class="val">[link here]</span></span>
+      <span class="prompt-line">&nbsp;</span>
+      <span class="prompt-line"><span class="key">Component library:</span> Only use components from this page: <span class="val">[link here]</span>.</span>
+      <span class="prompt-line comment">// If a component you need does not exist there, tell me before proceeding.</span>
+      <span class="prompt-line comment">// Do not pull from other libraries.</span>
+      <span class="prompt-line">&nbsp;</span>
+      <span class="prompt-line"><span class="key">Reference design:</span> <span class="val">[link here, or "none"]</span></span>
+      <span class="prompt-line">&nbsp;</span>
+      <span class="prompt-line"><span class="key">Screen spec:</span></span>
+      <span class="prompt-line">  Device: <span class="val">iPhone (375×848)</span></span>
+      <span class="prompt-line">  Visual tone: <span class="val">[light / dark / branded]</span></span>
+      <span class="prompt-line">  Content sections: <span class="val">[e.g. header, form, CTA, footer]</span></span>
+      <span class="prompt-line">  Components needed: <span class="val">[e.g. Text Input, Button, Standalone Link]</span></span>
+      <span class="prompt-line">&nbsp;</span>
+      <span class="prompt-line"><span class="key">Rules:</span></span>
+      <span class="prompt-line">  - Use vertical auto layout, 40px section gap, 24px horizontal padding</span>
+      <span class="prompt-line">  - Use section frames with fixed counter width</span>
+      <span class="prompt-line">  - Use the real iPhone status bar component</span>
+      <span class="prompt-line">  - All text must use correct text styles from the library</span>
+      <span class="prompt-line">  - Ask me before making any assumptions about layout or content</span>
+    </div>
+    <h3>Persisting rules with CLAUDE.md</h3>
+    <p>For rules that apply to every session in a project, you can save them in a <code>CLAUDE.md</code> file inside your project folder. Rules saved here are automatically loaded every time you start a session in that folder – so you don't need to repeat yourself in every prompt.</p>
+    <p>Good candidates for CLAUDE.md rules: which component library to always use, your standard frame dimensions, restrictions on pulling from other libraries, and any conventions specific to the project.</p>
+  </section>
+
+  <hr/>
+
+  <!-- 10. SECURITY -->
+  <section id="security">
+    <div class="section-label">10 – Security</div>
+    <h2>Security</h2>
+    <p>Working with AI agents introduces real security and privacy risks. The speed and convenience of the workflow do not change that. The rules in this section are not guidelines – they are requirements.</p>
+
+    <h3>GDPR: never expose personal data</h3>
+    <p>The agent reads your Figma file. Everything visible in that file – layer names, content, annotations, placeholder text – is sent to the model as part of the interaction. Any personal data present in the file at that point is a GDPR violation.</p>
+    <p>Do not work in any file that contains real client data, real user data, or identifiable information about coworkers. This includes names, email addresses, profile photos, account numbers, and any content derived from real people. Only generic, fictional, or fully anonymised placeholder content is acceptable. If you are unsure whether something counts as personal data, treat it as if it does.</p>
+    <div class="callout warning">
+      <strong>This rule is absolute.</strong> There are no exceptions based on file visibility settings, team permissions, or how sensitive you think the data is. If personal data is in the file, the agent cannot be used on it.
+    </div>
+
+    <h3>Work in a sandbox – never in production</h3>
+    <p>Every agent session must take place in a dedicated sandbox: a separate Figma project and file created specifically for AI-assisted work. This must be set up before you run any session.</p>
+    <p>The design system file is off limits. Production files are off limits. The agent must never have access to either. Once the agent has produced output you are happy with, transfer only the approved elements manually – after review – into the appropriate file. Never let the agent write directly into any shared or live file.</p>
+    <div class="callout danger">
+      One misrun session in a production file can corrupt components, break variable connections, and overwrite work that affects the entire team. The sandbox rule exists to make sure that never happens.
+    </div>
+
+    <h3>Restrict what the agent can access on your machine</h3>
+    <p>Claude Code runs via the terminal and has access to your local file system during a session. Do not configure it to run automatically in the background. Do not grant it access beyond what is needed for the specific task you are running. When the session is finished, close it. Do not leave an active session running unattended, and do not connect it to services or directories that have nothing to do with the current task.</p>
+
+    <h3>Review before you transfer anything</h3>
+    <p>Agent output is a starting point, not a finished result. Nothing produced by the agent should move to a shared library, a production file, or a developer handoff without being reviewed first. Check every output against the brief, the design system, and accessibility standards. The review step is not optional – it is the point at which you take responsibility for what the agent has produced.</p>
+  </section>
+
+  <hr/>
+
+  <!-- 11. USEFUL LINKS -->
+  <section id="useful-links">
+    <div class="section-label">11 – Resources</div>
+    <h2>Useful Links</h2>
+    <p style="margin-bottom:8px;"><a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" style="color:var(--accent);">Figma Blog – The Figma canvas is now open to agents</a></p>
+    <p style="margin-bottom:8px;"><a href="https://www.youtube.com/watch?v=mAUXxpRx9Zw" style="color:var(--accent);">YouTube – Setup requirements and process walkthrough</a></p>
+    <p style="margin-bottom:8px;"><a href="https://www.youtube.com/watch?v=c2Yusa1aIP4" style="color:var(--accent);">YouTube – Claude Code workflow with GitHub</a></p>
+    <p style="margin-bottom:8px;"><a href="https://www.youtube.com/watch?v=rqx5NlvEEUE" style="color:var(--accent);">YouTube – Claude Code beginner concepts</a></p>
+  </section>
+
+  <div class="doc-footer">
+    This document was prepared for internal knowledge sharing among UX designers. For questions about setup or permissions, reach out to your IT, Figma admin, or security team as indicated in the Permissions section above.
+  </div>
+
+</div>
+</body>
+</html>
