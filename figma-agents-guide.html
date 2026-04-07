@@ -97,7 +97,7 @@
     .callout.info { background: var(--accent-light); color: #2a2a6e; }
     .callout.tip { background: var(--green-light); color: var(--green); }
     .callout.warning { background: var(--amber-light); color: var(--amber); }
-    .callout.danger { background: #fef2f2; color: #991b1b; }
+    .callout.danger { background: #1a0000; color: #ff6b6b; border: 1px solid #7f1d1d; border-left: 4px solid #ef4444; font-weight: 500; }
     .callout strong { font-weight: 700; }
     .callout p { color: inherit; margin-bottom: 6px; }
     .callout p:last-child { margin-bottom: 0; }
@@ -124,7 +124,9 @@
     /* TOC */
     .toc { background: var(--grey-100); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
     .toc-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--grey-400); margin-bottom: 14px; }
-    .toc ol { padding-left: 18px; color: var(--grey-700); font-size: 14px; line-height: 2; }
+    .toc ol { padding-left: 0; list-style: none; counter-reset: toc-counter; color: var(--grey-700); font-size: 14px; line-height: 2; }
+    .toc ol li { counter-increment: toc-counter; display: flex; gap: 12px; }
+    .toc ol li::before { content: counter(toc-counter) "."; width: 28px; color: var(--grey-400); font-variant-numeric: tabular-nums; flex-shrink: 0; }
     .toc a { color: var(--grey-700); text-decoration: none; }
     .toc a:hover { color: var(--accent); }
 
@@ -149,6 +151,9 @@
     </div>
   </div>
 
+  <!-- LAST UPDATED -->
+  <p style="font-size:13px;color:var(--grey-400);margin-bottom:24px;">Last updated: April 7, 2026</p>
+
   <!-- TOC -->
   <div class="toc">
     <div class="toc-title">Contents</div>
@@ -159,6 +164,7 @@
       <li><a href="#permissions">Permissions &amp; Stakeholders</a></li>
       <li><a href="#install">Installation Walkthrough</a></li>
       <li><a href="#claude-app">Adding Figma to the Claude App</a></li>
+      <li><a href="#figma-skills">Downloading the Figma Skills</a></li>
       <li><a href="#designer-role">Your Role as a Designer</a></li>
       <li><a href="#code-connect">Code Connect (Design → Code)</a></li>
       <li><a href="#prompting">Prompting Guide</a></li>
@@ -171,9 +177,7 @@
   <section id="idea">
     <div class="section-label">01 – Overview</div>
     <h2>The big idea</h2>
-    <div class="hero-callout">
-      <p>You can now type a plain-English request in an AI tool, and it will reach into your Figma file and build or edit designs using your actual components and design system – not generic shapes.</p>
-    </div>
+    <p>You can now type a plain English request in an AI tool, and it will reach into your Figma file and build or edit designs using your actual components and design system – not generic shapes.</p>
     <figure class="diagram"><svg viewBox="0 0 680 488" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
   <defs>
     <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
@@ -238,9 +242,10 @@
   <path d="M 52 130 Q 16 290 52 414" stroke="#1e3a5f" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
   <text transform="rotate(-90)" x="-300" y="34" text-anchor="middle" fill="#374151" font-family="Inter,system-ui,sans-serif" font-size="10">screenshot feedback loop</text>
   <polygon points="50,414 56,408 44,408" fill="#1e3a5f"/>
-</svg><figcaption>End-to-end workflow: from your plain-English prompt to the Figma canvas, via the AI agent and MCP server.</figcaption></figure>
+</svg><figcaption>End-to-end workflow: from your plain English prompt to the Figma canvas, via the AI agent and MCP server.</figcaption></figure>
     <p>Figma's canvas is now open to AI agents. This means an AI tool like Claude can connect directly to your Figma file, read your component library, understand your design system, and create or modify designs on your behalf – all from a simple text prompt.</p>
     <p>This isn't a plugin that generates Lorem Ipsum frames. The agent uses your real components, your real variables, and your real naming conventions. The quality of the output is directly tied to the quality of your design system.</p>
+    <p>While the underlying MCP access and Figma skills are technically available to any LLM, Claude is currently the only AI with a fully seamless end-to-end workflow for this – which is why this guide focuses on Claude throughout.</p>
   </section>
 
   <hr/>
@@ -278,10 +283,6 @@
       <div class="term-row">
         <div class="term-name">Code Connect</div>
         <div class="term-def">A Figma feature (set up by a developer) that links each Figma component to its real code counterpart in the codebase. With Code Connect, the agent doesn't just see a "Button" – it sees the actual <code>&lt;Button&gt;</code> React component. This enables the agent to generate real, production-ready code.</div>
-      </div>
-      <div class="term-row">
-        <div class="term-name">Personal Access Token</div>
-        <div class="term-def">A private key generated in your Figma account settings. It's how Claude authenticates with Figma on your behalf. Treat it like a password – never share it or commit it to a document.</div>
       </div>
       <div class="term-row">
         <div class="term-name">CLAUDE.md</div>
@@ -541,9 +542,58 @@ claude</pre>
 
   <hr/>
 
-  <!-- 7. DESIGNER'S ROLE -->
+  <!-- 7. FIGMA SKILLS -->
+  <section id="figma-skills">
+    <div class="section-label">07 – Figma Skills</div>
+    <h2>Downloading the Figma skills</h2>
+    <p>Figma publishes a set of ready-made "skills" – short instruction files that teach Claude how to work with Figma properly. Without them, Claude has no context about Figma's structure, naming conventions, or best practices. Loading them once makes every future session significantly more reliable.</p>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Download the skills package</h4>
+          <p>Go to <a href="https://help.figma.com/hc/en-us/articles/39166810751895-Figma-skills-for-MCP" target="_blank">Figma's skills page</a> and download the skills package. You'll get a <code>.zip</code> file – unzip it and put the resulting folder somewhere easy to find, like your Desktop or Documents.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Open a new Claude Code session</h4>
+          <p>Open your terminal, start Claude Code, and navigate it to the folder you just unzipped. You can do this by typing <code>cd</code> followed by the path to the folder, or by dragging the folder into the terminal window to paste the path automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Tell Claude to add the skills globally</h4>
+          <p>Once you're inside the folder, type something like: <em>"Add all the skills in this folder to my global Claude config."</em> Claude will read the files and register them so they're available in every session, not just this one.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Restart Claude Code</h4>
+          <p>Close the current session and open a fresh one. New skills only take effect after a restart – they aren't loaded mid-session.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Confirm the skills loaded</h4>
+          <p>In the new session, type <code>/</code> and pause for a moment. A list of available slash commands should appear. If you can see Figma-related skills in that list, everything is working correctly.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout tip">
+      <strong>Tip:</strong> Skills are just markdown files, so you can open them in any text editor to see exactly what instructions they give Claude. If you ever want to customise behaviour – for example, to match your team's naming conventions – you can edit them directly.
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 8. DESIGNER'S ROLE -->
   <section id="designer-role">
-    <div class="section-label">07 – Your Role</div>
+    <div class="section-label">08 – Your Role</div>
     <h2>Your role as a designer</h2>
     <p>The rise of AI coding agents doesn't change what makes a great designer, but it fundamentally changes how you work. You are shifting from a builder of static layouts to a director of a living system.</p>
 
@@ -568,10 +618,10 @@ claude</pre>
 
   <hr/>
 
-  <!-- 8. CODE CONNECT -->
+  <!-- 9. CODE CONNECT -->
   <section id="code-connect">
-    <div class="section-label">08 – Design to code</div>
-    <h2>Code Connect: design to production components</h2>
+    <div class="section-label">09 – Design to code</div>
+    <h2>Code Connect</h2>
     <p>Code Connect is a Figma feature that links each component in your design system to its actual code counterpart in the codebase. It's an optional layer – relevant when the goal is to produce working code from your designs, not just Figma frames.</p>
     <figure class="diagram"><svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
   <defs>
@@ -702,7 +752,7 @@ claude</pre>
 
   <!-- 9. PROMPTING -->
   <section id="prompting">
-    <div class="section-label">09 – Prompting</div>
+    <div class="section-label">10 – Prompting</div>
     <h2>Prompting guide</h2>
     <p>The quality of the agent's output is directly influenced by how clearly you write your prompts. Here's a template that works well for screen creation tasks.</p>
     <div class="prompt-template">
@@ -736,7 +786,7 @@ claude</pre>
 
   <!-- 10. SECURITY -->
   <section id="security">
-    <div class="section-label">10 – Security</div>
+    <div class="section-label">11 – Security</div>
     <h2>Security</h2>
     <p>Working with AI agents introduces real security and privacy risks. The speed and convenience of the workflow do not change that. The rules in this section are not guidelines – they are requirements.</p>
 
@@ -765,7 +815,7 @@ claude</pre>
 
   <!-- 11. USEFUL LINKS -->
   <section id="useful-links">
-    <div class="section-label">11 – Resources</div>
+    <div class="section-label">12 – Resources</div>
     <h2>Useful Links</h2>
     <p style="margin-bottom:8px;"><a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" style="color:var(--accent);">Figma Blog – The Figma canvas is now open to agents</a></p>
     <p style="margin-bottom:8px;"><a href="https://www.youtube.com/watch?v=mAUXxpRx9Zw" style="color:var(--accent);">YouTube – Setup requirements and process walkthrough</a></p>
