@@ -136,6 +136,19 @@
 
     /* FOOTER */
     .doc-footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--grey-200); font-size: 13px; color: var(--grey-400); }
+
+    /* RISK REGISTER */
+    .risk-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .risk-table th { background: var(--grey-100); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey-400); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--grey-200); }
+    .risk-table td { padding: 12px 14px; vertical-align: top; border-bottom: 1px solid var(--grey-200); color: var(--grey-700); line-height: 1.5; }
+    .risk-table tbody tr:last-child td { border-bottom: none; }
+    .risk-id { font-family: 'SF Mono','Fira Code',monospace; font-size: 13px; font-weight: 700; color: var(--black); white-space: nowrap; }
+    .risk-score { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--black); text-align: center; }
+    .risk-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 4px; white-space: nowrap; }
+    .risk-badge.low { background: var(--green-light); color: var(--green); }
+    .risk-badge.medium { background: var(--amber-light); color: var(--amber); }
+    .risk-badge.high { background: #fee2e2; color: #991b1b; }
+    .risk-badge.critical { background: #450a0a; color: #fca5a5; }
   </style>
 </head>
 <body>
@@ -152,7 +165,7 @@
   </div>
 
   <!-- LAST UPDATED -->
-  <p style="font-size:13px;color:var(--grey-400);margin-bottom:24px;">Last updated: April 7, 2026</p>
+  <p style="font-size:13px;color:var(--grey-400);margin-bottom:24px;">Last updated: April 10, 2026</p>
 
   <!-- TOC -->
   <div class="toc">
@@ -169,6 +182,7 @@
       <li><a href="#code-connect">Code Connect (Design → Code)</a></li>
       <li><a href="#prompting">Prompting Guide</a></li>
       <li><a href="#security">Security</a></li>
+      <li><a href="#risk">Risk Assessment</a></li>
       <li><a href="#useful-links">Useful Links</a></li>
     </ol>
   </div>
@@ -813,9 +827,229 @@ claude</pre>
 
   <hr/>
 
-  <!-- 11. USEFUL LINKS -->
+  <!-- 12. RISK ASSESSMENT -->
+  <section id="risk">
+    <div class="section-label">12 – Risk</div>
+    <h2>Risk assessment</h2>
+    <p>The register below identifies the principal risks associated with using AI agents in IF's internal UX design process. Each risk is rated on a 1–5 scale across two dimensions: likelihood of occurrence under normal operating conditions, and severity of potential impact should the risk materialise. The overall risk level is the product of the two scores:</p>
+    <ul>
+      <li><strong>1–4:</strong> Low</li>
+      <li><strong>5–9:</strong> Medium</li>
+      <li><strong>10–15:</strong> High</li>
+      <li><strong>16–25:</strong> Critical</li>
+    </ul>
+    <figure class="diagram"><svg viewBox="0 0 680 522" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
+  <!-- Background -->
+  <rect width="680" height="522" fill="#0f172a" rx="10"/>
+
+  <!-- COLORED CELLS: row 0 = S5 Critical (top), row 4 = S1 Negligible (bottom) -->
+  <!-- Grid: x=80, y=20. Cell: 116×80. Right edge x=660, bottom y=420. -->
+  <!-- Colors: Low=#0F3D1E  Medium=#3D3600  High=#3D1E00  Critical=#3D0000 -->
+
+  <!-- Row 0: S5 Critical (score: 5,10,15,20,25) -->
+  <rect x="80"  y="20" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="196" y="20" width="116" height="80" fill="#3D1E00"/><!-- H -->
+  <rect x="312" y="20" width="116" height="80" fill="#3D1E00"/><!-- H -->
+  <rect x="428" y="20" width="116" height="80" fill="#3D0000"/><!-- C -->
+  <rect x="544" y="20" width="116" height="80" fill="#3D0000"/><!-- C -->
+
+  <!-- Row 1: S4 Major (score: 4,8,12,16,20) -->
+  <rect x="80"  y="100" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="196" y="100" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="312" y="100" width="116" height="80" fill="#3D1E00"/><!-- H -->
+  <rect x="428" y="100" width="116" height="80" fill="#3D0000"/><!-- C -->
+  <rect x="544" y="100" width="116" height="80" fill="#3D0000"/><!-- C -->
+
+  <!-- Row 2: S3 Moderate (score: 3,6,9,12,15) -->
+  <rect x="80"  y="180" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="196" y="180" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="312" y="180" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="428" y="180" width="116" height="80" fill="#3D1E00"/><!-- H -->
+  <rect x="544" y="180" width="116" height="80" fill="#3D1E00"/><!-- H -->
+
+  <!-- Row 3: S2 Minor (score: 2,4,6,8,10) -->
+  <rect x="80"  y="260" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="196" y="260" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="312" y="260" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="428" y="260" width="116" height="80" fill="#3D3600"/><!-- M -->
+  <rect x="544" y="260" width="116" height="80" fill="#3D1E00"/><!-- H -->
+
+  <!-- Row 4: S1 Negligible (score: 1,2,3,4,5) -->
+  <rect x="80"  y="340" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="196" y="340" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="312" y="340" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="428" y="340" width="116" height="80" fill="#0F3D1E"/><!-- L -->
+  <rect x="544" y="340" width="116" height="80" fill="#3D3600"/><!-- M -->
+
+  <!-- GRID LINES: verticals -->
+  <line x1="80"  y1="20" x2="80"  y2="420" stroke="#374151" stroke-width="1"/>
+  <line x1="196" y1="20" x2="196" y2="420" stroke="#374151" stroke-width="1"/>
+  <line x1="312" y1="20" x2="312" y2="420" stroke="#374151" stroke-width="1"/>
+  <line x1="428" y1="20" x2="428" y2="420" stroke="#374151" stroke-width="1"/>
+  <line x1="544" y1="20" x2="544" y2="420" stroke="#374151" stroke-width="1"/>
+  <line x1="660" y1="20" x2="660" y2="420" stroke="#374151" stroke-width="1"/>
+  <!-- GRID LINES: horizontals -->
+  <line x1="80" y1="20"  x2="660" y2="20"  stroke="#374151" stroke-width="1"/>
+  <line x1="80" y1="100" x2="660" y2="100" stroke="#374151" stroke-width="1"/>
+  <line x1="80" y1="180" x2="660" y2="180" stroke="#374151" stroke-width="1"/>
+  <line x1="80" y1="260" x2="660" y2="260" stroke="#374151" stroke-width="1"/>
+  <line x1="80" y1="340" x2="660" y2="340" stroke="#374151" stroke-width="1"/>
+  <line x1="80" y1="420" x2="660" y2="420" stroke="#374151" stroke-width="1"/>
+
+  <!-- Y AXIS TITLE (rotated, centered at x=12, y=220) -->
+  <text transform="rotate(-90,12,220)" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600" letter-spacing="0.1em">SEVERITY / IMPACT</text>
+
+  <!-- Y AXIS LABELS (col center x=80, labels right-aligned at x=76) -->
+  <!-- Row centers: S5=60, S4=140, S3=220, S2=300, S1=380 -->
+  <text x="76" y="56"  text-anchor="end" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">5</text>
+  <text x="76" y="71"  text-anchor="end" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Critical</text>
+  <text x="76" y="136" text-anchor="end" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">4</text>
+  <text x="76" y="151" text-anchor="end" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Major</text>
+  <text x="76" y="216" text-anchor="end" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">3</text>
+  <text x="76" y="231" text-anchor="end" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Moderate</text>
+  <text x="76" y="296" text-anchor="end" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">2</text>
+  <text x="76" y="311" text-anchor="end" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Minor</text>
+  <text x="76" y="376" text-anchor="end" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">1</text>
+  <text x="76" y="391" text-anchor="end" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Negligible</text>
+
+  <!-- X AXIS LABELS (col centers: L1=138, L2=254, L3=370, L4=486, L5=602) -->
+  <text x="138" y="437" text-anchor="middle" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">1</text>
+  <text x="138" y="451" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Rare</text>
+  <text x="254" y="437" text-anchor="middle" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">2</text>
+  <text x="254" y="451" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Unlikely</text>
+  <text x="370" y="437" text-anchor="middle" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">3</text>
+  <text x="370" y="451" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Possible</text>
+  <text x="486" y="437" text-anchor="middle" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">4</text>
+  <text x="486" y="451" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Likely</text>
+  <text x="602" y="437" text-anchor="middle" fill="#e5e7eb" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">5</text>
+  <text x="602" y="451" text-anchor="middle" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="10">Almost Certain</text>
+
+  <!-- X AXIS TITLE -->
+  <text x="370" y="470" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600" letter-spacing="0.1em">LIKELIHOOD →</text>
+
+  <!-- RISK DOTS (col centers: 138,254,370,486,602 · row centers: 60,140,220,300,380) -->
+  <!-- R4: Agent in production file  L=1 S=4 → (138, 140) Low cell -->
+  <circle cx="138" cy="140" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="138" y="145" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R4</text>
+
+  <!-- R1: Personal data in Figma    L=2 S=4 → (254, 140) Medium cell -->
+  <circle cx="254" cy="140" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="254" y="145" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R1</text>
+
+  <!-- R3: Figma token exposure       L=2 S=3 → (254, 220) Medium cell -->
+  <circle cx="254" cy="220" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="254" y="225" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R3</text>
+
+  <!-- R2: AI vendor data retention   L=2 S=2 → (254, 300) Low cell -->
+  <circle cx="254" cy="300" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="254" y="305" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R2</text>
+
+  <!-- R6: Product strategy in prompts L=3 S=2 → (370, 300) Medium cell -->
+  <circle cx="370" cy="300" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="370" y="305" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R6</text>
+
+  <!-- R5: Vendor unavailability       L=3 S=1 → (370, 380) Low cell -->
+  <circle cx="370" cy="380" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="370" y="385" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="700">R5</text>
+
+  <!-- AXIS LEGEND -->
+  <text x="80" y="488" fill="#c4c9d4" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">↑ Y axis: Severity / Impact</text>
+  <text x="390" y="488" fill="#c4c9d4" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">→ X axis: Likelihood</text>
+
+  <!-- COLOR LEGEND -->
+  <rect x="80"  y="500" width="14" height="12" rx="2" fill="#0F3D1E" stroke="#4b5563" stroke-width="1"/>
+  <text x="99"  y="511" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">Low (1–4)</text>
+  <rect x="178" y="500" width="14" height="12" rx="2" fill="#3D3600" stroke="#4b5563" stroke-width="1"/>
+  <text x="197" y="511" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">Medium (5–9)</text>
+  <rect x="306" y="500" width="14" height="12" rx="2" fill="#3D1E00" stroke="#4b5563" stroke-width="1"/>
+  <text x="325" y="511" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">High (10–15)</text>
+  <rect x="434" y="500" width="14" height="12" rx="2" fill="#3D0000" stroke="#4b5563" stroke-width="1"/>
+  <text x="453" y="511" fill="#9ca3af" font-family="Inter,system-ui,sans-serif" font-size="11">Critical (16–25)</text>
+</svg><figcaption>Risk matrix: all six identified risks (R1–R6) fall within the Low or Medium bands. Score = Likelihood × Severity.</figcaption></figure>
+
+    <h3>Risk register</h3>
+    <div style="border:1px solid var(--grey-200);border-radius:var(--radius);overflow:hidden;margin-top:20px;">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:40px">ID</th>
+            <th>Risk</th>
+            <th style="width:32px;text-align:center">L</th>
+            <th style="width:32px;text-align:center">S</th>
+            <th style="width:56px;text-align:center">Score</th>
+            <th style="width:90px">Level</th>
+            <th>Primary mitigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="risk-id">R1</td>
+            <td>Personal data accidentally included in a Figma file and transmitted to the AI model</td>
+            <td class="risk-score">2</td>
+            <td class="risk-score">4</td>
+            <td class="risk-score">8</td>
+            <td><span class="risk-badge medium">Medium</span></td>
+            <td>Sandbox rule prohibits any file containing real personal data from being used in an AI session. Only anonymous placeholder content is permitted. The agent cannot access files outside the URL it is explicitly provided.</td>
+          </tr>
+          <tr>
+            <td class="risk-id">R2</td>
+            <td>AI vendor retains or uses design data to train its models</td>
+            <td class="risk-score">2</td>
+            <td class="risk-score">2</td>
+            <td class="risk-score">4</td>
+            <td><span class="risk-badge low">Low</span></td>
+            <td>Anthropic's commercial API terms prohibit use of inputs for model training. Figma layer data – component names, layout properties, design variants – does not constitute personal or business-sensitive information; it is a representation of user-facing UI.</td>
+          </tr>
+          <tr>
+            <td class="risk-id">R3</td>
+            <td>Figma API token stolen or exposed, granting unauthorised read/write access to Figma files</td>
+            <td class="risk-score">2</td>
+            <td class="risk-score">3</td>
+            <td class="risk-score">6</td>
+            <td><span class="risk-badge medium">Medium</span></td>
+            <td>Token is stored in a local user configuration file; exposure requires compromise of the local machine. Scope tokens to read-only access where the workflow permits. Revoke and rotate immediately via Figma user settings upon suspected exposure.</td>
+          </tr>
+          <tr>
+            <td class="risk-id">R4</td>
+            <td>AI agent makes unintended changes to a production or design-system Figma file</td>
+            <td class="risk-score">1</td>
+            <td class="risk-score">4</td>
+            <td class="risk-score">4</td>
+            <td><span class="risk-badge low">Low</span></td>
+            <td>Sandbox requirement mandates a dedicated AI project in Figma, separate from all production and design-system files. The agent is never given access to production file URLs. Triggering this risk requires deliberate misconfiguration of the session. Approved output is transferred manually after review.</td>
+          </tr>
+          <tr>
+            <td class="risk-id">R5</td>
+            <td>Third-party AI vendor service becomes unavailable, blocking the AI-assisted workflow</td>
+            <td class="risk-score">3</td>
+            <td class="risk-score">1</td>
+            <td class="risk-score">3</td>
+            <td><span class="risk-badge low">Low</span></td>
+            <td>AI tooling is a productivity enhancement, not a critical business dependency. All design work can continue manually in Figma without interruption. No core IF business process depends solely on AI agent availability.</td>
+          </tr>
+          <tr>
+            <td class="risk-id">R6</td>
+            <td>Sensitive product strategy or unreleased feature details disclosed through prompt content</td>
+            <td class="risk-score">3</td>
+            <td class="risk-score">2</td>
+            <td class="risk-score">6</td>
+            <td><span class="risk-badge medium">Medium</span></td>
+            <td>Prompts should describe UI and UX intent only – screen names, component lists, layout rules. Product roadmap details, unreleased feature names, and competitive positioning should not appear in prompts. Anthropic's commercial API terms prohibit use of inputs for model training.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info" style="margin-top:24px;">
+      <strong>Why design AI sits at the lower end of the risk spectrum.</strong> Unlike AI use cases that access databases, email systems, documents, or internal APIs, the Figma agent operates within a closed visual sandbox. The information it processes is a structured representation of UI components – the same elements that will ultimately be visible to end users of IF's products. No backend system is accessed, no customer records are read, and no confidential business documents enter the model's context during a standard design session.
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 13. USEFUL LINKS -->
   <section id="useful-links">
-    <div class="section-label">12 – Resources</div>
+    <div class="section-label">13 – Resources</div>
     <h2>Useful Links</h2>
     <p style="margin-bottom:8px;"><a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" style="color:var(--accent);">Figma Blog – The Figma canvas is now open to agents</a></p>
     <p style="margin-bottom:8px;"><a href="https://www.youtube.com/watch?v=mAUXxpRx9Zw" style="color:var(--accent);">YouTube – Setup requirements and process walkthrough</a></p>
