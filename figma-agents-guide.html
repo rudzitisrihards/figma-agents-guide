@@ -29,7 +29,8 @@
 
     /* COVER */
     .cover { padding: 56px 48px; background: var(--black); border-radius: 12px; margin-bottom: 64px; position: relative; overflow: hidden; }
-    .cover::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, #5d5fef55 0%, transparent 70%); pointer-events: none; }
+    .cover::before { content: ''; position: absolute; top: -120px; right: -120px; width: 620px; height: 620px; background: radial-gradient(ellipse at center, #5d5fef30 0%, #5d5fef12 40%, transparent 70%); pointer-events: none; }
+    .cover::after { content: ''; position: absolute; bottom: -160px; left: -100px; width: 500px; height: 500px; background: radial-gradient(ellipse at center, #3b3dd420 0%, transparent 65%); pointer-events: none; }
     .cover-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
     .cover h1 { font-size: 36px; font-weight: 700; line-height: 1.2; color: var(--white); margin-bottom: 16px; }
     .cover-subtitle { font-size: 17px; color: #adadad; max-width: 520px; line-height: 1.5; }
@@ -97,7 +98,7 @@
     .callout.info { background: var(--accent-light); color: #2a2a6e; }
     .callout.tip { background: var(--green-light); color: var(--green); }
     .callout.warning { background: var(--amber-light); color: var(--amber); }
-    .callout.danger { background: #1a0000; color: #ff6b6b; border: 1px solid #7f1d1d; border-left: 4px solid #ef4444; font-weight: 500; }
+    .callout.danger { background: #fee2e2; color: #991b1b; }
     .callout strong { font-weight: 700; }
     .callout p { color: inherit; margin-bottom: 6px; }
     .callout p:last-child { margin-bottom: 0; }
@@ -165,7 +166,7 @@
   </div>
 
   <!-- LAST UPDATED -->
-  <p style="font-size:13px;color:var(--grey-400);margin-bottom:24px;">Last updated: April 10, 2026</p>
+  <p style="font-size:13px;color:var(--grey-400);margin-bottom:24px;">Last updated: April 28, 2026</p>
 
   <!-- TOC -->
   <div class="toc">
@@ -178,8 +179,8 @@
       <li><a href="#install">Installation Walkthrough</a></li>
       <li><a href="#claude-app">Adding Figma to the Claude App</a></li>
       <li><a href="#figma-skills">Downloading the Figma Skills</a></li>
-      <li><a href="#designer-role">Your Role as a Designer</a></li>
       <li><a href="#code-connect">Code Connect (Design → Code)</a></li>
+      <li><a href="#designer-role">Your Role as a Designer</a></li>
       <li><a href="#prompting">Prompting Guide</a></li>
       <li><a href="#security">Security</a></li>
       <li><a href="#risk">Risk Assessment</a></li>
@@ -337,78 +338,47 @@
   <section id="permissions">
     <div class="section-label">04 – Approvals</div>
     <h2>Permissions &amp; stakeholders</h2>
-    <p>This workflow involves a few external systems, so a handful of teams may need to be looped in before you can get started. Here's a map of who owns what.</p>
-    <figure class="diagram"><svg viewBox="0 0 680 268" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
-  <defs>
-    <marker id="b1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3z" fill="#4b5563"/></marker>
-  </defs>
-  <rect width="680" height="268" fill="#0f172a" rx="10"/>
-
-  <!-- Your laptop box -->
-  <rect x="20" y="20" width="210" height="180" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="125" y="40" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">Your laptop</text>
-  <rect x="36" y="52" width="178" height="52" rx="7" fill="#312e81"/>
-  <text x="125" y="73" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Claude Code</text>
-  <text x="125" y="91" text-anchor="middle" fill="#c7d2fe" font-family="Inter,system-ui,sans-serif" font-size="11">CLI app, runs locally</text>
-  <rect x="36" y="116" width="178" height="52" rx="7" fill="#1e293b"/>
-  <text x="125" y="137" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Figma desktop app</text>
-  <text x="125" y="155" text-anchor="middle" fill="#94a3b8" font-family="Inter,system-ui,sans-serif" font-size="11">Your normal Figma</text>
-
-  <!-- Firewall label -->
-  <text x="253" y="112" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600">Firewall /</text>
-  <text x="253" y="124" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="600">corp network</text>
-
-  <!-- HTTPS arrows from Claude Code -->
-  <line x1="214" y1="78" x2="368" y2="78" stroke="#374151" stroke-width="1.5" marker-end="url(#b1)"/>
-  <text x="291" y="70" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="10">HTTPS</text>
-
-  <line x1="214" y1="142" x2="368" y2="188" stroke="#374151" stroke-width="1.5" marker-end="url(#b1)"/>
-
-  <!-- Figma cloud box -->
-  <rect x="368" y="20" width="292" height="228" rx="8" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="514" y="40" text-anchor="middle" fill="#6b7280" font-family="Inter,system-ui,sans-serif" font-size="11" font-weight="600">Figma cloud</text>
-
-  <!-- Anthropic API -->
-  <rect x="384" y="52" width="260" height="52" rx="7" fill="#1e3a8a"/>
-  <text x="514" y="73" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Anthropic API</text>
-  <text x="514" y="91" text-anchor="middle" fill="#bfdbfe" font-family="Inter,system-ui,sans-serif" font-size="11">Runs the AI model</text>
-
-  <!-- Figma MCP server -->
-  <rect x="384" y="120" width="260" height="52" rx="7" fill="#78350f"/>
-  <text x="514" y="141" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Figma MCP server</text>
-  <text x="514" y="159" text-anchor="middle" fill="#fde68a" font-family="Inter,system-ui,sans-serif" font-size="11">Translates agent → Figma</text>
-
-  <!-- Your Figma files -->
-  <rect x="384" y="188" width="260" height="52" rx="7" fill="#166534"/>
-  <text x="514" y="209" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700">Your Figma files</text>
-  <text x="514" y="227" text-anchor="middle" fill="#bbf7d0" font-family="Inter,system-ui,sans-serif" font-size="11">Components, variables</text>
-
-</svg><figcaption>Network diagram: two HTTPS calls leave your machine – one to Anthropic's API, one to Figma's MCP server. Authentication with Figma is handled via OAuth in the browser.</figcaption></figure>
+    
     <div class="step-list">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <h4>Install Claude Code on your laptop</h4>
-          <p>Claude Code is a command-line tool you install locally. It doesn't have a graphical interface – you type prompts in a terminal. Your IT team needs to permit the installation, and the tool needs to be able to make outbound HTTPS calls to Anthropic's API.</p>
-          <span class="step-owner it">IT Team</span>
+          <h4>Get approval from your chapter lead</h4>
+          <p>Before setting anything up, align with your chapter lead on the purpose and scope of the work. Agree on what you're using AI agents for, which files or projects are in scope, and what the expected output is. This keeps the work intentional and avoids any surprises later.</p>
+          <span class="step-owner you">You</span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Connect Claude Code to Figma via OAuth</h4>
-          <p>A single terminal command registers Figma's MCP server with Claude Code. You then run <code>/mcp</code> inside Claude Code, select Figma, and choose Authenticate – a browser window opens, you log into your Figma account and approve access. No tokens, no config files. Claude Code manages the connection from there on.</p>
-          <span class="step-owner you">You</span>
+          <h4>Raise a service desk request for a subscription <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;padding:2px 8px;border-radius:4px;background:#e8e8e8;color:#9a9a9a;vertical-align:middle;margin-left:6px;">TBD</span></h4>
+          <p>Contact the IT service desk to purchase the required Claude subscription. The exact process, subscription tier, and cost centre details are still to be determined – check with your chapter lead or IT for the current procedure before raising the request.</p>
+          <span class="step-owner it">IT Service Desk</span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <h4>Data privacy check</h4>
-          <p>When the agent reads your Figma file to understand your components, that design content is sent to Anthropic's API as context. Worth flagging to your security or legal team so they can check Anthropic's data processing terms against your company's data classification policy.</p>
-          <span class="step-owner security">Security / Legal</span>
+          <h4>Install Claude Code on your machine</h4>
+          <p>Claude Code is a command-line tool you install locally. It doesn't have a graphical interface – you type prompts in a terminal. You need to have the appropriate system privileges to install CLI tools, and the tool needs to be able to make outbound HTTPS calls to Anthropic's API.</p>
+          <span class="step-owner it">IT Team</span>
         </div>
-        
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Connect Claude Code to Figma via OAuth</h4>
+          <p>A single terminal command registers Figma's MCP server with Claude Code. You then run <code>/mcp</code> inside Claude Code, select Figma, and choose Authenticate – a browser window opens, you log into your Figma account and approve access.</p>
+          <span class="step-owner you">You</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Review the security checklist</h4>
+          <p>Before you start, read through the <a href="#security">Security section</a> and make sure every measure is observed – data handling, access scoping, sandboxing, and GDPR obligations. These are your responsibility to follow.</p>
+          <span class="step-owner you">You</span>
+        </div>
       </div>
     </div>
   </section>
@@ -421,61 +391,21 @@
     <h2>Terminal installation walkthrough</h2>
     <p>These are the full terminal commands to get Claude Code installed on a Mac and connected to Figma. Follow each step in order. If your IT team handles the installation, share this section with them.</p>
     <div class="callout info">
-      <strong>Mac only.</strong> These instructions are for macOS using the ZSH shell. If you're on Windows or Linux, the commands differ slightly – refer to the official Claude Code documentation.
+      <strong>Mac and Linux.</strong> The commands below work on macOS and Linux only, using ZSH shell.
     </div>
     <div class="step-list">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <h4>Install Homebrew (Mac package manager)</h4>
-          <p>Homebrew is a tool that makes it easy to install software on a Mac. If you already have it, skip to step 2.</p>
-          <pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
-          <p>Once installed, add it to your shell's path so it's available in every terminal session:</p>
-          <pre>echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-source ~/.zshrc</pre>
-          <p>Verify it worked:</p>
-          <pre>brew --version</pre>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>Install NVM (Node version manager)</h4>
-          <p>NVM lets you install and manage versions of Node.js, which Claude Code requires.</p>
-          <pre>brew install nvm</pre>
-          <p>Add NVM to your shell:</p>
-          <pre>mkdir ~/.nvm
-echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
-echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"' >> ~/.zshrc
-source ~/.zshrc</pre>
-          <p>Verify:</p>
-          <pre>nvm --version</pre>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>Install Node.js</h4>
-          <p>Install the latest long-term support (LTS) version of Node.js:</p>
-          <pre>nvm install --lts
-nvm use --lts</pre>
-          <p>Verify both Node and npm are installed:</p>
-          <pre>node --version
-npm --version</pre>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
           <h4>Install Claude Code</h4>
-          <p>Install Claude Code globally using npm:</p>
-          <pre>npm install -g @anthropic-ai/claude-code</pre>
+          <p>Claude Code now ships as a native binary with its own installer – no Node.js, Homebrew, or npm needed. Paste this into your terminal:</p>
+          <pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
           <p>Verify the installation:</p>
           <pre>claude --version</pre>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">5</div>
+        <div class="step-num">2</div>
         <div class="step-body">
           <h4>Log into Claude Code</h4>
           <p>Start Claude Code and follow the login prompts (it will open a browser window to authenticate with your Anthropic account):</p>
@@ -483,7 +413,7 @@ npm --version</pre>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">6</div>
+        <div class="step-num">3</div>
         <div class="step-body">
           <h4>Connect Claude Code to Figma's MCP server</h4>
           <p>Register Figma's remote MCP server with Claude Code. The <code>--scope user</code> flag makes it available across all your projects, not just the current folder:</p>
@@ -493,7 +423,7 @@ npm --version</pre>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">7</div>
+        <div class="step-num">4</div>
         <div class="step-body">
           <h4>Authenticate with Figma via OAuth</h4>
           <p>No personal access token is needed. Figma uses OAuth – start Claude Code and run the MCP authentication flow:</p>
@@ -502,7 +432,7 @@ npm --version</pre>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">8</div>
+        <div class="step-num">5</div>
         <div class="step-body">
           <h4>Test the connection</h4>
           <p>Create a project folder, navigate into it, and start Claude. Then send a test prompt using a link to a Figma file you have access to:</p>
@@ -605,36 +535,9 @@ claude</pre>
 
   <hr/>
 
-  <!-- 8. DESIGNER'S ROLE -->
-  <section id="designer-role">
-    <div class="section-label">08 – Your Role</div>
-    <h2>Your role as a designer</h2>
-    <p>The rise of AI coding agents doesn't change what makes a great designer, but it fundamentally changes how you work. You are shifting from a builder of static layouts to a director of a living system.</p>
-
-    <h3>From Manual Labor to Systems Orchestration</h3>
-    <p>Previously, much of your time was spent manually drawing frames and pushing pixels to mimic components. With AI agents, the agent handles the assembly. Your value now lies in Systems Thinking:</p>
-    <ul>
-      <li><strong>Defining the Logic:</strong> You aren't just placing a button; you are defining the rules for when and how that button appears.</li>
-      <li><strong>Quality Control:</strong> The agent is only as good as your Design System. If your naming conventions are messy or your Auto Layout is broken, the agent will fail. Your job is to maintain the "source of truth."</li>
-      <li><strong>Creative Direction:</strong> You move from "How do I draw this?" to "Is this the right flow for the user?"</li>
-    </ul>
-
-    <h3>Bridging the Gap: Design is the Code</h3>
-    <p>The biggest shift is in the handoff. Traditionally, developers had to "interpret" your static Figma files, often leading to "pixel-polishing" meetings.</p>
-    <ul>
-      <li><strong>Less Interpretation:</strong> Because the agent uses Code Connect, it sees your Figma components as actual React elements (or your specific production code). It isn't guessing your intent; it is using the real thing.</li>
-      <li><strong>Functionality-First Development:</strong> Since the UI structure is generated directly from your design rules, developers spend less time recreating your visuals and more time on complex logic, security, and performance.</li>
-    </ul>
-
-    <h3>The Reality Check</h3>
-    <p>You still need your core UX skills – empathy, hierarchy, and logical flow. The tool just removes the friction of manual construction for both the designer and front-end developer. You are no longer just a figma user; you are an architect who uses the Figma canvas as a command center for production.</p>
-  </section>
-
-  <hr/>
-
-  <!-- 9. CODE CONNECT -->
+  <!-- 8. CODE CONNECT -->
   <section id="code-connect">
-    <div class="section-label">09 – Design to code</div>
+    <div class="section-label">08 – Design to code</div>
     <h2>Code Connect</h2>
     <p>Code Connect is a Figma feature that links each component in your design system to its actual code counterpart in the codebase. It's an optional layer – relevant when the goal is to produce working code from your designs, not just Figma frames.</p>
     <figure class="diagram"><svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;border-radius:10px;">
@@ -764,7 +667,29 @@ claude</pre>
 
   <hr/>
 
-  <!-- 9. PROMPTING -->
+  <!-- 9. DESIGNER'S ROLE -->
+  <section id="designer-role">
+    <div class="section-label">09 – Your Role</div>
+    <h2>Where AI actually saves you time</h2>
+    <p>AI agents are most useful for specific, repetitive tasks – not as a replacement for design judgement. Here are the areas where they have the most practical impact.</p>
+
+    <h3>Code Connect setup and maintenance</h3>
+    <p>Writing and updating Code Connect mapping files is tedious but mechanical. An agent can generate the initial mappings from your component library, keep them in sync when components are renamed, and flag gaps where no code counterpart exists yet.</p>
+
+    <h3>Visual fidelity checks</h3>
+    <p>Agents can compare a rendered component against its Figma spec and surface differences – spacing off by a few pixels, wrong border radius, missing state – faster than a manual review. Useful before handing off a new component or after a design system update.</p>
+
+    <h3>Repetitive frame and annotation work</h3>
+    <p>Generating multiple screen states, resizing layouts for different breakpoints, or adding redline annotations are all tasks where agents can compress hours of mechanical work into a prompt.</p>
+
+    <div class="callout info">
+      <strong>Your judgement stays essential.</strong> AI handles the assembly; you set the intent. Naming conventions, component structure, and design decisions still need a designer behind them – a poorly organised file produces poor output regardless of how capable the agent is.
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- 10. PROMPTING -->
   <section id="prompting">
     <div class="section-label">10 – Prompting</div>
     <h2>Prompting guide</h2>
@@ -814,12 +739,19 @@ claude</pre>
     <h3>Work in a sandbox – never in production</h3>
     <p>Every agent session must take place in a dedicated sandbox: a separate Figma project and file created specifically for AI-assisted work. This must be set up before you run any session.</p>
     <p>The design system file is off limits. Production files are off limits. The agent must never have access to either. Once the agent has produced output you are happy with, transfer only the approved elements manually – after review – into the appropriate file. Never let the agent write directly into any shared or live file.</p>
+    <p>Within your sandbox you have full freedom – including making copies of the design system to work against. A local copy gives the agent everything it needs to reference your components and variables without touching the source file. Explore, iterate, and break things freely in there.</p>
     <div class="callout danger">
       One misrun session in a production file can corrupt components, break variable connections, and overwrite work that affects the entire team. The sandbox rule exists to make sure that never happens.
     </div>
 
     <h3>Restrict what the agent can access on your machine</h3>
     <p>Claude Code runs via the terminal and has access to your local file system during a session. Do not configure it to run automatically in the background. Do not grant it access beyond what is needed for the specific task you are running. When the session is finished, close it. Do not leave an active session running unattended, and do not connect it to services or directories that have nothing to do with the current task.</p>
+
+    <h3>Access privileges determine eligibility</h3>
+    <p>If your user account has access to any company databases containing actual client data, you are not permitted to install these tools on your machine. The risk of accidental exposure – through a misconfigured session, a mistyped path, or an agent acting beyond its intended scope – is too high to mitigate through process alone. Eligibility must be determined by what you can access, not by what you intend to do.</p>
+    <div class="callout danger">
+      <strong>If in doubt, you are not eligible.</strong> Check your access permissions with IT before installing anything. Do not assume that keeping agent sessions separate from sensitive systems is sufficient – the tools themselves must not be present on the machine.
+    </div>
 
     <h3>Review before you transfer anything</h3>
     <p>Agent output is a starting point, not a finished result. Nothing produced by the agent should move to a shared library, a production file, or a developer handoff without being reviewed first. Check every output against the brief, the design system, and accessibility standards. The review step is not optional – it is the point at which you take responsibility for what the agent has produced.</p>
